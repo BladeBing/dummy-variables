@@ -1,0 +1,20 @@
+def dummy_cat(df, col):
+    '''
+    INPUT:
+    df - the dataframe where col is stored
+    col - the categorical column you want to dummy (as a string)
+    OUTPUT:
+    df - the dataframe with the added columns
+         for dummy variables using 1, 0, -1 coding
+    '''
+    for idx, val_0 in enumerate(df[col].unique()):
+        if idx + 1 < df[col].nunique():            
+            df[val_0] = df[col].apply(lambda x: 1 if x == val_0 else 0)
+        else:    
+            df[val_0] = df[col].apply(lambda x: -1 if x == val_0 else 0)
+            for idx, val_1 in enumerate(df[col].unique()):
+                if idx + 1 < df[col].nunique():
+                    df[val_1] = df[val_0] + df[val_1]
+                else:
+                    del df[val_1]
+    return df
